@@ -16,8 +16,8 @@ instanceids= []
 tg_name = 'New-target-grp'
 
 
-alb = boto3.client('elbv2')
-client = boto3.client('ec2')
+alb = boto3.client('elbv2', "us-east-1")
+client = boto3.client('ec2', "us-east-1")
 
 response = client.describe_instances(
     Filters=[
