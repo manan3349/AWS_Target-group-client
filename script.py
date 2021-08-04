@@ -14,7 +14,7 @@ VPC = str(sys.argv[2])
 temp = {}
 instanceids= []
 tg_name = 'Newest-target-grp'
-ls_arn = str(sys.argv[4:])
+ls_arn = str(sys.argv[4])
 
 alb = boto3.client('elbv2',region_name='us-east-1')
 client = boto3.client('ec2',region_name='us-east-1')
