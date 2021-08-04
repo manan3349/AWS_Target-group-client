@@ -18,6 +18,8 @@ tg_name = 'New-target-grp'
 my_session = boto3.session.Session()
 my_region = my_session.region_name
 
+print(my_region)
+
 alb = boto3.client('elbv2',region_name='us-east-1')
 client = boto3.client('ec2',region_name='us-east-1')
 
