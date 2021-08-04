@@ -3,9 +3,9 @@
 import sys
 import boto3
 
-if len(sys.argv) != 4:
+if len(sys.argv) != 5:
 	print("Usage:")
-	print(f"{' '*4} {sys.argv[0]} [PORT] [VPC] [TAGNAME Key:Value] ")
+	print(f"{' '*4} {sys.argv[0]} [PORT] [VPC] [TAGNAME Key:Value] [LISTENERARN]")
 	sys.exit(1)
 
 PORT = int(sys.argv[1])
@@ -13,12 +13,8 @@ KEY,VALUE = str(sys.argv[3]).split(":")
 VPC = str(sys.argv[2])
 temp = {}
 instanceids= []
-tg_name = 'New-target-grp'
-
-my_session = boto3.session.Session()
-my_region = my_session.region_name
-
-print(my_region)
+tg_name = 'Newest-target-grp'
+ls_arn = str(sys.argv[4:])
 
 alb = boto3.client('elbv2',region_name='us-east-1')
 client = boto3.client('ec2',region_name='us-east-1')
@@ -38,8 +34,18 @@ for instance in instances:
 	instanceids.append(temp.copy())
 
 response = alb.create_target_group( Name=tg_name, Protocol='HTTP', Port=PORT, VpcId=VPC,TargetType='instance')
-
 arn = response['TargetGroups'][0]['TargetGroupArn']
+
+response = alb.modify_listener(
+	ListenerArn=ls_arn,
+    DefaultActions=[
+        {
+            'TargetGroupArn': arn,
+            'Type': 'forward',
+        },
+    ],
+    Port=80,
+    Protocol='HTTP')
 
 response = alb.register_targets(TargetGroupArn=arn,Targets=instanceids)
 if response['ResponseMetadata']['HTTPStatusCode'] == 200:
