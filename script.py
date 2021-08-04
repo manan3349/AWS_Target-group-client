@@ -17,8 +17,8 @@ tg_name = 'New-target-grp'
 region_name='us-east-1'
 
 
-alb = boto3.client('elbv2')
-client = boto3.client('ec2')
+alb = boto3.client('elbv2', region_name)
+client = boto3.client('ec2', region_name)
 
 response = client.describe_instances(
     Filters=[
