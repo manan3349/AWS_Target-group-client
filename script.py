@@ -14,10 +14,11 @@ VPC = str(sys.argv[2])
 temp = {}
 instanceids= []
 tg_name = 'New-target-grp'
+region_name='us-east-1'
 
 
-alb = boto3.client('elbv2', "us-east-1")
-client = boto3.client('ec2', "us-east-1")
+alb = boto3.client('elbv2')
+client = boto3.client('ec2')
 
 response = client.describe_instances(
     Filters=[
